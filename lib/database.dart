@@ -18,15 +18,17 @@ class DbHelper {
     }
     try {
       print("creating new one");
+
       path = await getDatabasesPath() + "demo.db";
+      await deleteDatabase(path);
       db = await openDatabase(path, version: version,
           onCreate: (db, version) async {
-            print("creating new one");
+        print("creating new one");
         await db.execute("""
 CREATE TABLE $tableName(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  data STRING
-)
+  data STRING,
+  name STRING )
 """);
       });
     } on DatabaseException catch (e) {

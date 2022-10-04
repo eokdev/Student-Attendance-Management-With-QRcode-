@@ -48,7 +48,11 @@ dev_dependencies:
   qr_code_scanner: ^1.0.0
   sqflite: ^2.0.3
   get_storage:
-  get: ^4.6.5
+  state_notifier: ^0.7.2+1
+  flutter_riverpod: ^2.0.0
+  http: ^0.13.5
+  html: ^0.15.0
+  
 
 
 # For information on the generic Dart part of this file, see the
