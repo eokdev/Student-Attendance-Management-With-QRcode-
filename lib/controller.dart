@@ -9,19 +9,18 @@ import 'package:html/dom.dart' as dom;
 
 class Notify extends StateNotifier<List<Tasks>> {
   Notify() : super([]);
-
-
+List<Tasks> stater=[];
   Future<int> addTasks(Tasks tasks) async {
     return await DbHelper.insert(tasks);
   }
 
   Future<void> getTasks() async {
     List<Map<String, dynamic>> tasks = await DbHelper.query();
-
-    state.assignAll(
+    print("getTasks method called");
+    
+ return   stater.assignAll(
       tasks.map((data) => Tasks.fromJson(data)).toList(),
     );
-    print("getTasks method called");
   }
 }
 

@@ -8,7 +8,9 @@ import 'QrCodeScanner.dart';
 final myProvider = StateNotifierProvider<Notify, List<Tasks>>(
   (ref) => Notify(),
 );
-
+final vider = StateNotifierProvider<Notify, List<Tasks>>(
+  (ref) => Notify(),
+);
 // final qrImage = FutureProvider((ref) {
 //   return ref.watch(provider).getWebData(res.toString());
 // });

@@ -9,25 +9,13 @@ import 'package:sam/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
 
-class StList extends ConsumerStatefulWidget {
-  
-  @override
-  _StListState createState() => _StListState();
-}
-
-class _StListState extends ConsumerState<StList> {
-  @override
-  void initState() {
-    super.initState();
-    
-    // ref.read(qrImage);
-    ref.read(myProvider.notifier).getTasks();
-  }
+class StList extends ConsumerWidget {
+  StList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final userList = ref.watch(myProvider);
-// final image = ref.watch(qrImage);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userList = ref.read(myProvider.notifier).stater;
+   
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -35,27 +23,24 @@ class _StListState extends ConsumerState<StList> {
       ),
       body: Column(
         children: [
-          Expanded(child: Consumer(builder: (context, watch, child) {
-            return ListView.builder(
+          Expanded(
+            child: ListView.builder(
                 itemCount: userList.length,
                 itemBuilder: (BuildContext context, int index) {
+                  
                   return ListTile(
-                    leading: image == false
-                        ? CircularProgressIndicator()
-                        : CircleAvatar(
-                            child: Image.network(
-                              userList[index].data.toString(),
-                              width: 100,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                    title: text == false
-                        ? Text("Loading....")
-                        : Text(userList[index].name.toString()),
+                    leading: CircleAvatar(
+                      child: Image.network(
+                        userList[index].data.toString(),
+                        width: 100,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: Text(userList[index].name.toString()),
                   );
-                });
-          })),
+                }),
+          ),
         ],
       ),
     );
