@@ -11,6 +11,9 @@ final myProvider = StateNotifierProvider<Notify, List<Tasks>>(
 final vider = StateNotifierProvider<Notify, List<Tasks>>(
   (ref) => Notify(),
 );
+final toggle = StateNotifierProvider((ref) {
+  return TouchToggle();
+});
 // final qrImage = FutureProvider((ref) {
 //   return ref.watch(provider).getWebData(res.toString());
 // });

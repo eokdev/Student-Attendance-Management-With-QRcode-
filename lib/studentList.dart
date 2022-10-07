@@ -19,10 +19,11 @@ class StList extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("SAM"),
+        title: Text("List Of Attendees"),
       ),
       body: Column(
         children: [
+          
           Expanded(
             child: ListView.builder(
                 itemCount: userList.length,

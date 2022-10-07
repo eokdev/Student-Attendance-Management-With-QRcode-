@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, depend_on_referenced_packages, prefer_const_constructors, unnecessary_import
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sam/QrCodeScanner.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DbHelper.initDb();
-
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(ProviderScope(child: MyApp()));
 }
 

@@ -24,6 +24,15 @@ List<Tasks> stater=[];
   }
 }
 
+class TouchToggle extends StateNotifier{
+  TouchToggle(): super(bool);
+  void toggleMe(){
+    state=!state;
+  }
+}
+final toggleProvider = Provider<TouchToggle>((ref) {
+  return TouchToggle();
+});
 // class QrImage {
 //  List tasks=[];
  
