@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, file_names, prefer_const_constructors, depend_on_referenced_packages, avoid_print, library_private_types_in_public_api, unused_local_variable, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_typing_uninitialized_variables, unnecessary_this, unnecessary_null_comparison, unnecessary_string_interpolations, sized_box_for_whitespace, deprecated_member_use, prefer_collection_literals, body_might_complete_normally_nullable
+// ignore_for_file: unused_import, file_names, prefer_const_constructors, depend_on_referenced_packages, avoid_print, library_private_types_in_public_api, unused_local_variable, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_typing_uninitialized_variables, unnecessary_this, unnecessary_null_comparison, unnecessary_string_interpolations, sized_box_for_whitespace, deprecated_member_use, prefer_collection_literals, body_might_complete_normally_nullable, prefer_is_empty
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,20 +15,42 @@ class StList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userList = ref.read(myProvider.notifier).stater;
-   
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Hero(
+              tag: "shift",
+             
+              child: Icon(Icons.arrow_back, size: 30)),
+        ),
         centerTitle: true,
-        title: Text("List Of Attendees"),
+        title: userList.length <= 0
+            ? Text(
+                "List Of Attendee",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 25),
+              )
+            : Text(
+                "List Of Attendees",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 25),
+              ),
       ),
       body: Column(
         children: [
-          
           Expanded(
             child: ListView.builder(
                 itemCount: userList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  
                   return ListTile(
                     leading: CircleAvatar(
                       child: Image.network(
