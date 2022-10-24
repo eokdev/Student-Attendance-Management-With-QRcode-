@@ -79,11 +79,11 @@ class _StListState extends ConsumerState<StList> {
               children: [
                 Consumer(builder: (context, ref, child) {
                   final list = ref.read(myProvider2.notifier).stater;
-                  return Text(list[0].controller1.toString(), style:   GoogleFonts.lato(color: Colors.black, fontSize: 21),);
+                  return Text(list[0].controller1.toString(), style:   GoogleFonts.lato(color: Colors.black, fontSize: 20),);
                 }),
                 Consumer(builder: (context, ref, child) {
                   final list = ref.read(myProvider2.notifier).stater;
-                  return Text(list[0].controller2.toString());
+                  return Text(list[0].controller2.toString(), style: GoogleFonts.lato(color: Colors.black, fontSize: 20),);
                 }),
                 // ref.read(myProvider2.notifier).stater2.isEmpty
                 //     ? Text("nothing")
@@ -132,8 +132,9 @@ class _StListState extends ConsumerState<StList> {
                               ),
                               child: Card(
                                 child: ListTile(
-                                  trailing: Text("${index+1}" ),
-                                  leading: CircleAvatar(
+
+                                  leading: Text("${index+1}" ),
+                                  trailing: CircleAvatar(
                                     child: Image.network(
                                       userList[index].data.toString(),
                                       width: 100,

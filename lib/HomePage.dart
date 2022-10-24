@@ -84,14 +84,20 @@ class _HomePageState extends ConsumerState<HomePage> {
                           Size(MediaQuery.of(context).size.width * 0.4, 35)),
                   onPressed: () {
                     input.add(Tasks2(
-                      controller1: textEditingController1.text,
-                      controller2: textEditingController2.text
-                    ));
-
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(builder: (context) => QrCodeScanner()),
-                    );
+                        controller1: textEditingController1.text,
+                        controller2: textEditingController2.text));
+                    if (textEditingController1.text.isNotEmpty &&
+                        textEditingController2.text.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => QrCodeScanner()),
+                      );
+                    }else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Resgister Your Course"))
+                      );
+                    }
                   },
                   child: Row(
                     children: [
