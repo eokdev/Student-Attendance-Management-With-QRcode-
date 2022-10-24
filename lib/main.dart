@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sam/QrCodeScanner.dart';
-import 'package:get/get.dart';
+
 import 'package:sam/database.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "HomePage.dart";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,8 +25,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData().copyWith(
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ThemeData().colorScheme.copyWith(primary: Colors.black),
+      ),
       debugShowCheckedModeBanner: false,
-      home: QrCodeScanner(),
+      home: HomePage(),
     );
   }
 }

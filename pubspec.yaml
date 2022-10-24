@@ -45,13 +45,16 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  qr_code_scanner: ^1.0.0
+  qr_code_scanner: ^1.0.1
   sqflite: ^2.0.3
-  get_storage:
+  get: ^4.6.5
+  motion_toast: ^2.4.3
   state_notifier: ^0.7.2+1
   flutter_riverpod: ^2.0.0
   http: ^0.13.5
   html: ^0.15.0
+  google_fonts: ^3.0.1
+  flutter_slidable: ^2.0.0
   
 
 

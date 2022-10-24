@@ -1,7 +1,8 @@
-// ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, sized_box_for_whitespace, unused_import, depend_on_referenced_packages, unused_element, unnecessary_import, avoid_print, no_leading_underscores_for_local_identifiers, library_private_types_in_public_api, override_on_non_overriding_member, unnecessary_string_interpolations, unrelated_type_equality_checks, use_build_context_synchronously, avoid_unnecessary_containers, invalid_use_of_protected_member, prefer_typing_uninitialized_variables
+// ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, sized_box_for_whitespace, unused_import, depend_on_referenced_packages, unused_element, unnecessary_import, avoid_print, no_leading_underscores_for_local_identifiers, library_private_types_in_public_api, override_on_non_overriding_member, unnecessary_string_interpolations, unrelated_type_equality_checks, use_build_context_synchronously, avoid_unnecessary_containers, invalid_use_of_protected_member, prefer_typing_uninitialized_variables, unnecessary_null_comparison
 
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:sam/HomePage.dart';
 import 'package:sam/controller.dart';
 import 'package:sam/provider.dart';
 import 'package:sam/studentList.dart';
@@ -13,8 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
-
 import 'package:state_notifier/state_notifier.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 String res = "";
 
@@ -25,6 +26,14 @@ class QrCodeScanner extends ConsumerStatefulWidget {
 }
 
 class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
+  bool checme = false;
+  Key keyy = UniqueKey();
+  void restartApp() {
+    setState(() {
+      keyy = UniqueKey();
+    });
+  }
+
   late List tasks = [
     if (tasks.length == 1) {tasks.clear()}
   ];
@@ -38,12 +47,12 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
     dom.Document html = dom.Document.html(response.body);
 
     final elements = html.getElementsByClassName("col-sm-12 col-md-4");
-    tasks = elements
+    imageData = elements
         .map((e) => e.getElementsByTagName("img")[0].attributes["src"])
         .toList();
 
     print("getWebDataImage Called");
-    return tasks;
+    return imageData;
   }
 
   Future getWebDataText(String link) async {
@@ -51,11 +60,11 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
     dom.Document html = dom.Document.html(response.body);
 
     final elements = html.getElementsByClassName("col-10 mx-auto text-center");
-    imageData =
+    tasks =
         elements.map((e) => e.getElementsByTagName("h1")[0].innerHtml).toList();
 
     print("getWebDataText Called");
-    return imageData;
+    return tasks;
   }
 
   QRViewController? controller;
@@ -64,8 +73,8 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
   @override
   void initState() {
     super.initState();
-    //controller!.resumeCamera();
     ref.read(myProvider.notifier).getTasks();
+    //ref.read(myProvider2.notifier).getTasks2();
   }
 
   @override
@@ -76,12 +85,11 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
 
   @override
   Widget build(BuildContext context) {
-    final addTasks = ref.watch(myProvider.notifier);
+   
     var queryHeight = MediaQuery.of(context).size.height;
     var queryWidth = MediaQuery.of(context).size.width;
 
     res = (result != null) ? result!.code.toString() : "";
-    bool checme = false;
 
     // In order to get hot reload to work we need to pause the camera if the platform
     // is android, or resume the camera if the platform is iOS.
@@ -103,14 +111,20 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
       });
     }
 
-    getWebDataImage(res);
+    if (res.startsWith("ht")) {
+      //snackbar
+
+    }
+  getWebDataImage(res);
     getWebDataText(res);
     bool? me;
+
     return Scaffold(
       //  backgroundColor: Color(0xff000000),
       appBar: PreferredSize(
         preferredSize: Size(0, 80),
         child: AppBar(
+          backgroundColor: Colors.blue,
           toolbarHeight: 80,
           elevation: 5,
           centerTitle: true,
@@ -137,11 +151,24 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
             ),
           ),
           actions: [
-            Consumer(builder: (context, watch, child) {
-              var state;
+            Consumer(builder: (contextt, watch, child) {
               return GestureDetector(
                 onTap: () {
                   checme = !checme;
+                  if (checme == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Torchlight On"),
+                      duration: Duration(seconds: 1),
+                    ));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Torchlight Off"),
+                      duration: Duration(seconds: 1),
+                    ));
+                  }
+                  controller!.toggleFlash();
+
+                  setState(() {});
 
                   print(checme);
                 },
@@ -155,13 +182,24 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
                 ),
               );
             }),
+            IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  //ref.read(myProvider.notifier).getTasks();
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  size: 30,
+                )),
             SizedBox(
               width: 10,
             ),
             IconButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (context) => StList()));
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => StList()),
+                  );
                 },
                 icon: Icon(
                   Icons.arrow_forward,
@@ -175,25 +213,20 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
           width: queryWidth,
           child: Stack(
             children: [
-              QRView(
-                key: qrKey,
-                // overlay: QrScannerOverlayShape(
-                //   borderColor: Colors.green,
-                //   borderRadius: 30,
-                // ),
-                onQRViewCreated: _onQrCodeCreated,
+              InkWell(
+                onLongPress: () {
+                  controller!.resumeCamera();
+                },
+                child: QRView(
+                  cameraFacing: CameraFacing.back,
+                  key: qrKey,
+                  // overlay: QrScannerOverlayShape(
+                  //   borderColor: Colors.blue,
+                  //   borderRadius: 30,
+                  // ),
+                  onQRViewCreated: _onQrCodeCreated,
+                ),
               ),
-              // Align(
-              //   alignment: Alignment.center,
-              //   child: Container(
-              //     height: queryHeight*0.4,
-              //     width: queryWidth * 0.9,
-              //     decoration: BoxDecoration(
-              //         border: Border.all(width: 1, color: Colors.green),
-              //         borderRadius: BorderRadius.circular(30)
-              //         ),
-              //   ),
-              // ),
               Align(
                 alignment: Alignment.center,
                 child: (result != null)
@@ -202,47 +235,49 @@ class _QrCodeScannerState extends ConsumerState<QrCodeScanner> {
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       )
                     : Text(
-                        "Tap on screen to resume camera ",
+                        "LongPress on screen to resume camera ",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.blue)),
-                    onPressed: 
-                    res.isEmpty
-                        ? () {
-                            //import snackbar here
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Colors.white,
-                                padding: EdgeInsets.all(10),
-                                behavior: SnackBarBehavior.floating,
-                                content: Text(
-                                  " - Tap on screen to resume camera\n - Scan the student QrCode\n - Connect to Internet\n - Click on + Add Student button",
-                                  style: TextStyle(color: Colors.black),
+                child: Consumer(builder: (context, ref, child) {
+                  final addTasks = ref.watch(myProvider.notifier);
+                  return ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue)),
+                      onPressed: res.isEmpty
+                          ? () {
+                              //import snackbar here
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.white,
+                                  padding: EdgeInsets.all(10),
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Text(
+                                    "              WARNING!\n\n - Tap on screen to resume camera\n - Scan the student QrCode\n - Connect to Internet\n - Click on + Add Student button",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
-                              ),
-                            );
-                            print("dont call mee");
-                          }
-                        : 
-                        () async {
-                            await addTasks.addTasks(
-                                Tasks(data: tasks[0], name: imageData[0]));
-                            await ref.watch(myProvider.notifier).getTasks();
-
-                            Navigator.push(context,
-                                CupertinoPageRoute(builder: (context) {
-                              return StList();
-                            }));
-                          },
-                    child: Text("+ Add Student")),
-              )
+                              );  
+                              print("dont call mee");
+                            }
+                          : () async{
+                          await    addTasks.addTasks(
+                                  Tasks(name: tasks[0], data: imageData[0]));
+                           await        ref.read(myProvider.notifier).getTasks();
+                              // await name.addImage(
+                              //     ref.read(myProvider.notifier).imageData[0]);
+                         await   Navigator.push(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return StList();
+                              }));
+                            },
+                      child: Text("+ Add Student"));
+                }),
+              ),
             ],
           )),
 

@@ -1,15 +1,17 @@
 // ignore_for_file: unused_import, depend_on_referenced_packages, unnecessary_overrides, unused_local_variable, avoid_print, annotate_overrides, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:sam/database.dart';
 import 'package:sam/tasks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
+import 'package:get/get.dart';
 
 class Notify extends StateNotifier<List<Tasks>> {
   Notify() : super([]);
+
   List<Tasks> stater = [];
   Future<int> addTasks(Tasks tasks) async {
     return await DbHelper.insert(tasks);
@@ -23,17 +25,22 @@ class Notify extends StateNotifier<List<Tasks>> {
       tasks.map((data) => Tasks.fromJson(data)).toList(),
     );
   }
+
+  void delete(Tasks tasks) {
+    DbHelper.deleteTask(tasks);
+  
+  }
+
+  // void closeDb() {
+  //   DbHelper.close();
+  // }
+
+  void deleteDb() {
+    DbHelper.delete();
+    getTasks();
+  }
 }
 
-class Toggle extends StateNotifier {
-  Toggle() : super(bool);
-  final state = false;
- 
-}
-
-final toggle = Provider<Toggle>((ref) {
-  return Toggle();
-});
 // class TouchToggle extends ChangeNotifier {
 //   bool stater = false;
 //   toggleMe() {
@@ -47,7 +54,7 @@ final toggle = Provider<Toggle>((ref) {
 // });
 // class QrImage {
 //  List tasks=[];
- 
+
 //  Future getWebData(String link) async {
 //     final url = Uri.parse("$link");
 //     final response = await http.get(url);
@@ -59,16 +66,13 @@ final toggle = Provider<Toggle>((ref) {
 //         .toList();
 //            print("getWebData Called");
 // return tasks;
- 
+
 //   }
 // }
 
 // final provider = Provider<QrImage>((ref) {
 //   return QrImage();
 // });
-
-
-
 
 // class TasksController extends GetxController {
 //   @override
@@ -77,7 +81,7 @@ final toggle = Provider<Toggle>((ref) {
 //   }
 
 //   var tasksLists = <Tasks>[].obs;
-  
+
 //   Future<int> addTasks(Tasks tasks) async {
 //     return await DbHelper.insert(tasks);
 //   }

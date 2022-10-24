@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sam/controller.dart';
 import 'package:sam/tasks.dart';
 import 'QrCodeScanner.dart';
+import 'controller2.dart';
+import 'tasks2.dart';
 
 final myProvider = StateNotifierProvider<Notify, List<Tasks>>(
   (ref) => Notify(),
 );
-final togFunction = StateNotifierProvider(
+final myProvider2 = StateNotifierProvider<Toggle, List<Tasks2>>(
   (ref) => Toggle(),
 );
 
